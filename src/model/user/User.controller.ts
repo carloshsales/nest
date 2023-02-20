@@ -12,7 +12,7 @@ import { DataProcessing } from "src/helpers/exceptions/dataprocessing";
 import { UserService } from "./User.service";
 import { CreateUserDto } from "./dto/CreateUser.dto";
 import { UpdateUserDto } from "./dto/UpdateUser.dto";
-import { UserEntity } from "./entities/user.entity";
+import { UserEntity } from "./entities/User.entity";
 
 @ApiTags("User")
 @Controller("user")
