@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String  @id @unique
+  name            String
+  email           String  @unique
+  cpf             String
+  password        String
+  confirmPassword String
+  isAdmin         Boolean
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  profiles Profile[]
+  Live     Live[]
+
+  @@map("user")
+}
+
+model Game {
+  id                 String @id @unique
+  title              String
+  coverImageUrl      String
+  description        String
+  year               String
+  imdbScore          Int
+  trailerYouTubeUrl  String
+  gameplayYouTubeUrl String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  profiles Profile[]
+  Live     Live[]
+
+  @@map("game")
+}
+
+model Profile {
+  id       String @id @unique
+  title    String
+  imageUrl String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  games  Game[]
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+  Live   Live[]
+
+  @@map("profile")
+}
+
+model Live {
+  id String @id @unique
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId String  @map("profile_Id")
+
+  games  Game   @relation(fields: [gameId], references: [id])
+  gameId String @map("game_Id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("Live")
+}
